@@ -1,9 +1,12 @@
 services:
   - type: web
     name: pocketbase-app
-    env: go
-    buildCommand: "go build -o pocketbase ."
-    startCommand: "./pocketbase serve --dir /pb_data"
+    env: static
+    buildCommand: |
+      curl -L https://github.com/pocketbase/pocketbase/releases/download/v0.26.6/pocketbase_0.26.6_linux_amd64.zip -o pb.zip
+      unzip pb.zip -d pb
+      chmod +x pb/pocketbase
+    startCommand: ./pb/pocketbase serve --dir /pb_data
     region: us
     autoscale:
       minInstances: 1
@@ -12,6 +15,5 @@ services:
       - name: pocketbase-data
         size: 1GB
         mountPath: /pb_data
-    build:
-      autoDeploy: true
-    pullRequestPreviews: true
+    autoDeploy: true
+    pullRequestPreviewsEnabled: true
