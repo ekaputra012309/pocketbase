@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: pocketbase-app
+    env: go
+    buildCommand: "go build -o pocketbase ."
+    startCommand: "./pocketbase serve --dir /pb_data"
+    region: us
+    autoscale:
+      minInstances: 1
+      maxInstances: 5
+    persistentVolumes:
+      - name: pocketbase-data
+        size: 1GB
+        mountPath: /pb_data
+    build:
+      autoDeploy: true
+    pullRequestPreviews: true
